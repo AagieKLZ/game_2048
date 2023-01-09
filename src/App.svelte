@@ -1,10 +1,12 @@
 <script>
+import NumberGenerator from './utils/NumberGenerator'
 let gameMatrix = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0]
 ]
+console.log(NumberGenerator())
 </script>
 
 <div id="board">
@@ -20,7 +22,7 @@ let gameMatrix = [
     width: 500px;
     height: 500px;
     border-radius: 50px;
-    background-color: black;
+    background-color: white;
     top: 50%;
     left: 50%;
     position: absolute;
@@ -31,16 +33,19 @@ let gameMatrix = [
     grid-template-rows: repeat(4, 1fr);
 }
 .square{
-    justify-content: center;
     text-align: center;
-    align-items: center;
+    padding-top: 50px;
+    border-radius: 15px;
+    border: 1px solid white;
 }
 
-.square:nth-child(2n){
+.square:nth-child(5n+1), .square:nth-child(3), .square:nth-child(8), .square:nth-child(9), .square:nth-child(14){
     background-color: bisque;
 }
 
-.square:nth-child(2n-1){
-    background-color: yellow;
+.square:nth-child(5n+2), .square:nth-child(5n), .square:nth-child(4), .square:nth-child(13){
+    background-color: lightblue;
 }
+
+
 </style>
