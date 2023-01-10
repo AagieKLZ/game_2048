@@ -6,22 +6,33 @@ let gameOver = false;
 let points = getScore()
 $: points = getScore()
 $: computedMatrix = gameMatrix;
+let movement = ""
 function keypressed(e){
-    if(e.key === "ArrowRight"){
-        moveRight();   
-    } else if (e.key == "ArrowLeft"){
-        moveLeft();
-    } else if (e.key == "ArrowUp"){
-        moveUp();
-    } else if (e.key == "ArrowDown"){
-        moveDown();
+    switch(e.key){
+        case "ArrowRight":
+            moveRight()
+            movement = "R"
+            break
+        case "ArrowLeft":
+            moveLeft()
+            movement = "L"
+            break
+        case "ArrowUp":
+            moveUp() 
+            movement = "U"
+            break
+        case "ArrowDown":
+            moveDown()
+            movement = "D"
+            break
     }
     computedMatrix = gameMatrix;
-    gameOver = checkGameOver()
     points = getScore()
+    gameOver = checkGameOver()
     if (gameOver){
         alert("Game Over")
     }
+
 }
 </script>
 <svelte:window on:keydown={keypressed} />
@@ -29,10 +40,12 @@ function keypressed(e){
 <span>Game Over</span>
 {/if}
 <span>Points: {points}</span>
+<div class="anim">{movement}</div>
+<button>Reset</button>
 <div id="board" on:keydown={keypressed}>
     {#each computedMatrix as row}
         {#each row as cell}
-            <div class={`square ${cell === 0 ? "zero" : ""}`}>{cell}</div>
+            <div class={`square ${cell === 0 ? "zero" : "nonzero"}`} itemid={Math.log2(cell).toString()}>{cell}</div>
         {/each}
     {/each}
 </div>
@@ -73,6 +86,36 @@ function keypressed(e){
 .zero{
     color: transparent;
 }
+
+.square:nth-child(5n+1).nonzero, .square:nth-child(3).nonzero, .square:nth-child(8).nonzero, .square:nth-child(9).nonzero, .square:nth-child(14).nonzero{
+    border: inset 8px;
+    border-color: rgb(240, 214, 182);
+}
+
+.nonzero{
+    border: inset 8px;
+    border-color: rgb(160, 199, 212)
+}
+
+.anim{
+    position: absolute;
+    left: 50%;
+    top: 10%;
+    animation: cubic-bezier(0.075, 0.82, 0.165, 1)
+}
+
+/* .square[itemid="1"]{ background-color: #FFB6C1}
+.square[itemid="2"]{ background-color: #FFA07A}
+.square[itemid="3"]{ background-color: #FF7F50}
+.square[itemid="4"]{ background-color: #FF4500}
+.square[itemid="5"]{ background-color: #FF0000}
+.square[itemid="6"]{ background-color: #8B0000}
+.square[itemid="7"]{ background-color: #800000}
+.square[itemid="8"]{ background-color: #A52A2A}
+.square[itemid="9"]{ background-color: #B22222}
+.square[itemid="10"]{ background-color: #CD5C5C}
+.square[itemid="11"]{ background-color: #DC143C} */
+
 
 
 </style>
