@@ -1,21 +1,42 @@
 <script>
-import NumberGenerator from './utils/NumberGenerator'
-let gameMatrix = [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
-]
-console.log(NumberGenerator())
+import {gameMatrix, newNumber, getScore, moveRight, moveLeft, moveDown, moveUp, checkGameOver } from './utils/Board'
+newNumber()
+let computedMatrix = gameMatrix
+let gameOver = false;
+let points = getScore()
+$: points = getScore()
+$: computedMatrix = gameMatrix;
+function keypressed(e){
+    if(e.key === "ArrowRight"){
+        moveRight();   
+    } else if (e.key == "ArrowLeft"){
+        moveLeft();
+    } else if (e.key == "ArrowUp"){
+        moveUp();
+    } else if (e.key == "ArrowDown"){
+        moveDown();
+    }
+    computedMatrix = gameMatrix;
+    gameOver = checkGameOver()
+    points = getScore()
+    if (gameOver){
+        alert("Game Over")
+    }
+}
 </script>
-
-<div id="board">
-    {#each gameMatrix as row}
+<svelte:window on:keydown={keypressed} />
+{#if gameOver}
+<span>Game Over</span>
+{/if}
+<span>Points: {points}</span>
+<div id="board" on:keydown={keypressed}>
+    {#each computedMatrix as row}
         {#each row as cell}
-            <div class="square">{cell}</div>
+            <div class={`square ${cell === 0 ? "zero" : ""}`}>{cell}</div>
         {/each}
     {/each}
 </div>
+
 
 <style>
 #board{
@@ -34,9 +55,11 @@ console.log(NumberGenerator())
 }
 .square{
     text-align: center;
-    padding-top: 50px;
+    padding-top: 45px;
     border-radius: 15px;
     border: 1px solid white;
+    font-size: 30px;
+    font-family:monospace
 }
 
 .square:nth-child(5n+1), .square:nth-child(3), .square:nth-child(8), .square:nth-child(9), .square:nth-child(14){
@@ -45,6 +68,10 @@ console.log(NumberGenerator())
 
 .square:nth-child(5n+2), .square:nth-child(5n), .square:nth-child(4), .square:nth-child(13){
     background-color: lightblue;
+}
+
+.zero{
+    color: transparent;
 }
 
 
